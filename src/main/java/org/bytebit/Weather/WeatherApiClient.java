@@ -23,17 +23,21 @@ public class WeatherApiClient {
 
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
-            ObjectMapper mapper = new ObjectMapper();
+            if (response.statusCode() != 200) {
+                return null;
+            } else {
+                ObjectMapper mapper = new ObjectMapper();
 
-            WeatherResponse weatherResponse = mapper.readValue(response.body(), WeatherResponse.class);
+                WeatherResponse weatherResponse = mapper.readValue(response.body(), WeatherResponse.class);
 
-            CurrentWeather currentWeather = weatherResponse.currentWeather;
+                CurrentWeather currentWeather = weatherResponse.currentWeather;
 
-            return "Temperature: "
-                    + currentWeather.getTemperature()
-                    + "°C\nWind Speed: "
-                    + currentWeather.getWindSpeed()
-                    + " km/h";
+                return "Temperature: "
+                        + currentWeather.getTemperature()
+                        + "°C\nWind Speed: "
+                        + currentWeather.getWindSpeed()
+                        + " km/h";
+            }
     }
 
     private String buildUrl(double latitude, double longitude) {

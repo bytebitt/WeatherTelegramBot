@@ -26,14 +26,27 @@ public class MyTelegramBot implements LongPollingSingleThreadUpdateConsumer {
             long chatId = update.getMessage().getChatId();
             String messageText = update.getMessage().getText();
 
-            if (messageText.equals("/start")) {
+            if (messageText == null || messageText.isBlank()) {
+                sendMessage(chatId,"Enter the city name clearly");
+            } else if (messageText.equals("/start")) {
                 sendMessage(chatId, """
                         👋Hi! I'm Weather Telegram Bot by bytebit.\n
                         Enter a city, and I'll send weather information for the city.
                         """);
+            } else if (messageText.equals("/help")) {
+                sendMessage(chatId, """
+                        🤖This bot is designed to send weather information.\n
+                        Send the name of the city, and the bot will send temperature and wind speed.\n
+                        If the title consists of two words, use a hyphen.
+                        """);
             } else {
                 try {
                     double[] coordinates = geocodingApiClient.getCoordinatesByCity(messageText);
+
+                    if (coordinates == null) {
+                        sendMessage(chatId, "Invalid input.");
+                        return;
+                    }
 
                     double latitude = coordinates[0];
                     double longitude = coordinates[1];

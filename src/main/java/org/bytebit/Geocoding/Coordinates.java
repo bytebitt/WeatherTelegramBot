@@ -1,12 +1,18 @@
 package org.bytebit.Geocoding;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Result {
+public class Coordinates {
     private double latitude;
     private double longitude;
+
+    public Coordinates() {}
+
+    public Coordinates(double latitude, double longitude) {
+        this.latitude = latitude;
+        this.longitude = longitude;
+    }
 
     public double getLatitude() {
         return latitude;

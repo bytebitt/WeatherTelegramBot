@@ -6,5 +6,5 @@ import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class GeocodingResponse {
-    public List<Result> results;
+    public List<Coordinates> results;
 }

@@ -12,7 +12,7 @@ import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 
 public class GeocodingApiClient {
-    public double[] getCoordinatesByCity(String city) throws IOException, InterruptedException {
+    public Coordinates getCoordinatesByCity(String city) throws IOException, InterruptedException {
         HttpClient httpClient = HttpClient.newHttpClient();
 
         HttpRequest request = HttpRequest.newBuilder()
@@ -40,7 +40,7 @@ public class GeocodingApiClient {
             double latitude = geocodingResponse.results.getFirst().getLatitude();
             double longitude = geocodingResponse.results.getFirst().getLongitude();
 
-            return new double[] {latitude, longitude};
+            return new Coordinates(latitude, longitude);
         }
     }
 

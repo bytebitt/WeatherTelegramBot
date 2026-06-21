@@ -4,9 +4,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
 import java.net.URI;
+import java.net.URLEncoder;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 
 public class GeocodingApiClient {
@@ -22,17 +24,28 @@ public class GeocodingApiClient {
 
         HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
-        ObjectMapper mapper = new ObjectMapper();
+        if (response.statusCode() != 200) {
+            return null;
+        } else {
+            ObjectMapper mapper = new ObjectMapper();
 
-        GeocodingResponse geocodingService = mapper.readValue(response.body(), GeocodingResponse.class);
+            GeocodingResponse geocodingResponse = mapper.readValue(response.body(), GeocodingResponse.class);
 
-        double latitude = geocodingService.results.getFirst().getLatitude();
-        double longitude = geocodingService.results.getFirst().getLongitude();
+            if (geocodingResponse == null ||
+                    geocodingResponse.results == null||
+                    geocodingResponse.results.isEmpty()) {
+                return null;
+            }
 
-        return new double[] {latitude, longitude};
+            double latitude = geocodingResponse.results.getFirst().getLatitude();
+            double longitude = geocodingResponse.results.getFirst().getLongitude();
+
+            return new double[] {latitude, longitude};
+        }
     }
 
     private String buildUrl(String city) {
-        return "https://geocoding-api.open-meteo.com/v1/search?name=" + city + "&count=1&language=en&format=json";
+        String encodedCity = URLEncoder.encode(city, StandardCharsets.UTF_8);
+        return "https://geocoding-api.open-meteo.com/v1/search?name=" + encodedCity + "&count=1&language=en&format=json";
     }
 }

@@ -19,7 +19,7 @@ public class GeocodingApiClient {
                 .GET()
                 .header("Accept", "application/json")
                 .uri(URI.create(buildUrl(city)))
-                .timeout(Duration.ofSeconds(10))
+                .timeout(Duration.ofSeconds(20))
                 .build();
 
         HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());

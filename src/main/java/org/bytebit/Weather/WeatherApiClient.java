@@ -17,7 +17,7 @@ public class WeatherApiClient {
                 .GET()
                 .header("Accept", "application/json")
                 .uri(URI.create(buildUrl(latitude, longitude)))
-                .timeout(Duration.ofSeconds(10))
+                .timeout(Duration.ofSeconds(20))
                 .build();
 
 

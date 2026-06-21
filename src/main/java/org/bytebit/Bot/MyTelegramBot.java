@@ -1,9 +1,8 @@
 package org.bytebit.Bot;
 
+import org.bytebit.Geocoding.Coordinates;
 import org.bytebit.Geocoding.GeocodingApiClient;
-import org.bytebit.Weather.CurrentWeather;
 import org.bytebit.Weather.WeatherApiClient;
-import org.checkerframework.checker.units.qual.C;
 import org.telegram.telegrambots.client.okhttp.OkHttpTelegramClient;
 import org.telegram.telegrambots.longpolling.util.LongPollingSingleThreadUpdateConsumer;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -41,15 +40,15 @@ public class MyTelegramBot implements LongPollingSingleThreadUpdateConsumer {
                         """);
             } else {
                 try {
-                    double[] coordinates = geocodingApiClient.getCoordinatesByCity(messageText);
+                    Coordinates coordinates = geocodingApiClient.getCoordinatesByCity(messageText);
 
                     if (coordinates == null) {
                         sendMessage(chatId, "Invalid input.");
                         return;
                     }
 
-                    double latitude = coordinates[0];
-                    double longitude = coordinates[1];
+                    double latitude = coordinates.getLatitude();
+                    double longitude = coordinates.getLongitude();
 
                     String weather = weatherApiClient.getWeatherByCoordinates(latitude, longitude);
                     sendMessage(chatId, weather);

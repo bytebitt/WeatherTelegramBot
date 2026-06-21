@@ -17,7 +17,7 @@ public class MyTelegramBot implements LongPollingSingleThreadUpdateConsumer {
     private static final String TELEGRAM_BOT_TOKEN = System.getenv("TELEGRAM_BOT_TOKEN");
     private static final GeocodingApiClient geocodingApiClient = new GeocodingApiClient();
     private static final WeatherApiClient weatherApiClient = new WeatherApiClient();
-    private final TelegramClient telegramClient = new OkHttpTelegramClient(TELEGRAM_BOT_TOKEN);
+    private static final TelegramClient telegramClient = new OkHttpTelegramClient(TELEGRAM_BOT_TOKEN);
 
     @Override
     public void consume(Update update) {
@@ -26,7 +26,7 @@ public class MyTelegramBot implements LongPollingSingleThreadUpdateConsumer {
             String messageText = update.getMessage().getText();
 
             if (messageText == null || messageText.isBlank()) {
-                sendMessage(chatId,"Enter the city name clearly");
+                sendMessage(chatId, "Enter the city name clearly");
             } else if (messageText.equals("/start")) {
                 sendMessage(chatId, """
                         👋Hi! I'm Weather Telegram Bot by bytebit.\n
@@ -39,24 +39,27 @@ public class MyTelegramBot implements LongPollingSingleThreadUpdateConsumer {
                         If the title consists of two words, use a hyphen.
                         """);
             } else {
-                try {
-                    Coordinates coordinates = geocodingApiClient.getCoordinatesByCity(messageText);
+                sendMessage(chatId, "⚙️Loading Weather Information...");
+                new Thread(() -> {
+                    try {
+                        Coordinates coordinates = geocodingApiClient.getCoordinatesByCity(messageText);
 
-                    if (coordinates == null) {
-                        sendMessage(chatId, "Invalid input.");
-                        return;
+                        if (coordinates == null) {
+                            sendMessage(chatId, "Invalid input.");
+                            return;
+                        }
+
+                        double latitude = coordinates.getLatitude();
+                        double longitude = coordinates.getLongitude();
+
+                        String weather = weatherApiClient.getWeatherByCoordinates(latitude, longitude);
+                        sendMessage(chatId, weather);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
                     }
-
-                    double latitude = coordinates.getLatitude();
-                    double longitude = coordinates.getLongitude();
-
-                    String weather = weatherApiClient.getWeatherByCoordinates(latitude, longitude);
-                    sendMessage(chatId, weather);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+                }).start();
             }
         }
     }

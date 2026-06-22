@@ -33,20 +33,17 @@ public class MyTelegramBot implements LongPollingSingleThreadUpdateConsumer {
                     .build();
             try {
                 if (messageText == null || messageText.isBlank()) {
-                    telegramClient.execute(chatAction);
                     sendMessage(chatId, "Enter the city name clearly");
                 } else if (messageText.equals("/start")) {
-                    telegramClient.execute(chatAction);
                     sendMessage(chatId, """
                             👋Hi! I'm Weather Telegram Bot by bytebit.\n
                             Enter a city, and I'll send weather information for the city.
                             """);
                 } else if (messageText.equals("/help")) {
-                    telegramClient.execute(chatAction);
                     sendMessage(chatId, """
                             🤖This bot is designed to send weather information.\n
                             Send the name of the city, and the bot will send temperature and wind speed.\n
-                            If the title consists of two words, use a hyphen.
+                            Some city names consisting of 2 or more words require a hyphen.
                             """);
                 } else {
                     SendMessage loadingMessageBuilder = SendMessage.builder()

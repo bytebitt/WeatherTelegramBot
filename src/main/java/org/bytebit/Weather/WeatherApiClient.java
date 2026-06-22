@@ -1,6 +1,7 @@
 package org.bytebit.Weather;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.net.URI;
@@ -21,23 +22,41 @@ public class WeatherApiClient {
                 .build();
 
 
-            HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+        HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
-            if (response.statusCode() != 200) {
-                return null;
-            } else {
-                ObjectMapper mapper = new ObjectMapper();
+        if (response.statusCode() != 200) {
+            return null;
+        } else {
+            ObjectMapper mapper = new ObjectMapper();
 
-                WeatherResponse weatherResponse = mapper.readValue(response.body(), WeatherResponse.class);
+            WeatherResponse weatherResponse = mapper.readValue(response.body(), WeatherResponse.class);
 
-                CurrentWeather currentWeather = weatherResponse.currentWeather;
+            String weather = getString(weatherResponse);
 
-                return "Temperature: "
-                        + currentWeather.getTemperature()
-                        + "°C\nWind Speed: "
-                        + currentWeather.getWindSpeed()
-                        + " km/h";
-            }
+            return weather;
+        }
+    }
+
+    private static String getString(WeatherResponse weatherResponse) {
+        CurrentWeather currentWeather = weatherResponse.currentWeather;
+
+        boolean isHotWeather = currentWeather.getTemperature() > 25;
+        boolean isColdWeather = currentWeather.getTemperature() < 10;
+
+        String weather = "Temperature: "
+                + currentWeather.getTemperature()
+                + "°C\nWind Speed: "
+                + currentWeather.getWindSpeed()
+                + " km/h";
+
+        if (isHotWeather) {
+            weather += "\n\n🌡️It's Hot Outside";
+        } else if (isColdWeather) {
+            weather += "\n\n🥶It's Cold Outside";
+        } else {
+            weather += "\n\n👌It's Mild Weather";
+        }
+        return weather;
     }
 
     private String buildUrl(double latitude, double longitude) {

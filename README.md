@@ -45,3 +45,14 @@ A simple Telegram bot written in Java that provides current weather information 
 - `MyTelegramBot` – message handling and user interaction
 
 ---
+
+## Output Example
+```
+🌥️Weather in London right now:
+Temperature: 27.9°C
+Wind Speed: 16.9 km/h
+
+🌡️It's Hot Outside
+```
+
+---

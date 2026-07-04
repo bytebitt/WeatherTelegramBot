@@ -40,13 +40,13 @@ public class WeatherApiClient {
     private static String getString(WeatherResponse weatherResponse) {
         CurrentWeather currentWeather = weatherResponse.currentWeather;
 
-        boolean isHotWeather = currentWeather.getTemperature() > 25;
-        boolean isColdWeather = currentWeather.getTemperature() < 10;
+        boolean isHotWeather = currentWeather.temperature() > 25;
+        boolean isColdWeather = currentWeather.temperature() < 10;
 
         String weather = "Temperature: "
-                + currentWeather.getTemperature()
+                + currentWeather.temperature()
                 + "°C\nWind Speed: "
-                + currentWeather.getWindSpeed()
+                + currentWeather.temperature()
                 + " km/h";
 
         if (isHotWeather) {

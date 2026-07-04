@@ -37,8 +37,8 @@ public class GeocodingApiClient {
                 return null;
             }
 
-            double latitude = geocodingResponse.results.getFirst().getLatitude();
-            double longitude = geocodingResponse.results.getFirst().getLongitude();
+            double latitude = geocodingResponse.results.getFirst().latitude();
+            double longitude = geocodingResponse.results.getFirst().longitude();
 
             return new Coordinates(latitude, longitude);
         }

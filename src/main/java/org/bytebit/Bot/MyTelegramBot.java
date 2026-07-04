@@ -64,8 +64,8 @@ public class MyTelegramBot implements LongPollingSingleThreadUpdateConsumer {
                                 return;
                             }
 
-                            double latitude = coordinates.getLatitude();
-                            double longitude = coordinates.getLongitude();
+                            double latitude = coordinates.latitude();
+                            double longitude = coordinates.longitude();
 
                             String weather = weatherApiClient.getWeatherByCoordinates(latitude, longitude);
 

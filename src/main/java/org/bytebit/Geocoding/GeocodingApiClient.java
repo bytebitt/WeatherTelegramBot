@@ -12,6 +12,21 @@ import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 
 public class GeocodingApiClient {
+    /**
+     * Retrieves the geographic coordinates (latitude and longitude) of a city
+     * using the GeoCoding API.
+     *
+     * <p>
+     * This method sends an HTTP request to the GeoCoding API, parses the JSON response,
+     * and returns the coordinates of the first matching city result.
+     * </p>
+     *
+     * @param city the name of the city to search for
+     * @return {@link Coordinates} object containing latitude and longitude,
+     *         or {@code null} if the city was not found or the API returned an error
+     * @throws IOException if an I/O error occurs during the HTTP request or JSON parsing
+     * @throws InterruptedException if the HTTP request is interrupted
+     */
     public Coordinates getCoordinatesByCity(String city) throws IOException, InterruptedException {
         HttpClient httpClient = HttpClient.newHttpClient();
 

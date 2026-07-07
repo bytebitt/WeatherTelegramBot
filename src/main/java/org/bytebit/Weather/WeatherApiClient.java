@@ -11,6 +11,22 @@ import java.net.http.HttpResponse;
 import java.time.Duration;
 
 public class WeatherApiClient {
+    /**
+     * Retrieves weather information for a location using its geographic coordinates.
+     *
+     * <p>
+     * This method sends an HTTP request to the Weather API with the provided
+     * latitude and longitude, parses the JSON response, and converts the weather
+     * data into a readable string format.
+     * </p>
+     *
+     * @param latitude the latitude coordinate of the location
+     * @param longitude the longitude coordinate of the location
+     * @return formatted weather information as a string,
+     *         or {@code null} if the API request was unsuccessful
+     * @throws IOException if an I/O error occurs during the HTTP request or JSON parsing
+     * @throws InterruptedException if the HTTP request is interrupted
+     */
     public String getWeatherByCoordinates(double latitude, double longitude) throws IOException, InterruptedException {
         HttpClient httpClient = HttpClient.newHttpClient();
 
